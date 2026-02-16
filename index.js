@@ -3,7 +3,15 @@ let sacar = document.getElementById("sacar");
 let mostrar = document.getElementById("Mostrar");
 let historico = document.getElementById("historico");
 
-let saldo = 0;
+let saldo = JSON.parse(localStorage.getItem("saldo")) || 0;
+
+let historicoLista = JSON.parse(localStorage.getItem("historico")) || [];
+mostrar.innerHTML = "Seu saldo atual é: R$ " + saldo;
+
+
+historicoLista.forEach(item => {
+    historico.innerHTML += `<p>${item}</p>`;
+});
 
 function adicionarSaldo(){
     let valor = Number(adicionar.value);
@@ -13,8 +21,12 @@ function adicionarSaldo(){
         mostrar.innerHTML = "Seu saldo atual é: R$"+ saldo;
         adicionar.value = "";
 
-       historico.innerHTML += `<p>Você adicionou na sua conta: R$ ${valor}</p>`;
-
+       let mensagem = `Você adicionou na sua conta: R$ ${valor}`;
+        historicoLista.push(mensagem);
+        historico.innerHTML += `<p>${mensagem}</p>`;
+    
+       localStorage.setItem("saldo", JSON.stringify(saldo));
+        localStorage.setItem("historico", JSON.stringify(historicoLista));
     }else{
         alert("Coloque um valor valido")
     }
@@ -31,8 +43,12 @@ function sacarSaldo(){
         mostrar.innerHTML = "Seu saldo atual é: R$"+saldo;
         sacar.value = "";
 
-     historico.innerHTML += `<p>Você sacou da sua conta: R$ ${retirar}</p>`;
+     let mensagem = `Você sacou da sua conta: R$ ${retirar}`;
+        historicoLista.push(mensagem);
+        historico.innerHTML += `<p>${mensagem}</p>`;
 
+      localStorage.setItem("saldo", JSON.stringify(saldo));
+      localStorage.setItem("historico", JSON.stringify(historicoLista));
     }else{
         alert("Saldo insuficiente ou valor inválido")
     }
